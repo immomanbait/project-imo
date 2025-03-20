@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\admin\HotSpotController;
 use App\Http\Controllers\admin\KecamatanController;
+use App\Http\Controllers\wisataController;
+use App\Http\Controllers\admin\ulasanController;
+use App\Http\Controllers\admin\kategoriController;
+
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
@@ -20,16 +24,12 @@ use Spatie\Permission\Models\Role;
 Route::get('/', function () {
     return view('welcome');
 
-    //Menambahkan Role
-    // auth()->user()->assignRole('admin');
 
     //Cek User
     // if (auth()->user()->hasRole('user')) {
     //   return 'Oke';
     // }
 
-    //Menghapus Role
-    // auth()->user()->removeRole('admin');
 
     // Sungkronus atau Update Roles
     // auth()->user()->assignRole('admin', 'user');
@@ -50,6 +50,12 @@ Route::get('/', function () {
 Route::view('home', 'home')->middleware('auth');
 
 Route::get('/admin', [AdminController::class, 'index']);
+Route::get('/dataLokasi', [wisataController::class, 'index']);
+Route::get('/dataUlasan', [ulasanController::class, 'index']);
+Route::get('/dataKategori', [kategoriController::class, 'index']);
+
+
+
 
 // Route::group(['middleware' => ['role:admin']], function () {
 //     Route::get('/admin', [AdminController::class, 'index']);
@@ -59,26 +65,26 @@ Route::get('/admin', [AdminController::class, 'index']);
 // Route::match(['get', 'post'], '/administrator', 'admin\adminController@login');
 Route::post('login-post', [AdminController::class, 'login']);
 Route::prefix('administrator')->group(function () {
+    // Middleware untuk memastikan hanya admin yang dapat mengakses route ini
     Route::group(['middleware' => ['role:admin']], function () {
         Route::get('/home', [AdminController::class, 'index']);
-
 
         // CRUD Kecamatan
         Route::get('/kecamatan-view', [KecamatanController::class, 'viewKecamatan']);
         Route::match(['get', 'post'], '/kecamatan-add', [KecamatanController::class, 'addKecamatan']);
         Route::match(['get', 'post'], '/kecamatan-edit/{id}', [KecamatanController::class, 'editKecamatan']);
-        Route::Delete('kecamatan-del/{id}', [KecamatanController::class, 'delKecamatan']);
+        Route::delete('/kecamatan-del/{id}', [KecamatanController::class, 'delKecamatan']);
 
         // View Maps
         Route::get('/kecamatan-view-maps', [KecamatanController::class, 'viewMapsKecamatan']);
 
         // CRUD HotSpot
-        Route::get('/hospot-view', [HotSpotController::class, 'viewHotspot']);
-        Route::match(['get', 'post'], '/hospot-add', [HotSpotController::class, 'addHotspot']);
-        Route::Delete('hospot-del/{id}', [HotSpotController::class, 'delHotspot']);
-        Route::match(['get', 'post'], '/hospot-edit/{id}', [HotSpotController::class, 'editHotspot']);
+        Route::get('/hotspot-view', [HotSpotController::class, 'viewHotspot']);
+        Route::match(['get', 'post'], '/hotspot-add', [HotSpotController::class, 'addHotspot']);
+        Route::delete('/hotspot-del/{id}', [HotSpotController::class, 'delHotspot']);
+        Route::match(['get', 'post'], '/hotspot-edit/{id}', [HotSpotController::class, 'editHotspot']);
 
         // View Maps HotSpot
-        Route::get('/hospot-view-maps', [HotSpotController::class, 'viewMapsHotspot']);
+        Route::get('/hotspot-view-maps', [HotSpotController::class, 'viewMapsHotspot']);
     });
 });

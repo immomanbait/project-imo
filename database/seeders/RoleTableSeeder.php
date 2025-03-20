@@ -3,8 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use App\Models\Role;
 
 class RoleTableSeeder extends Seeder
 {
@@ -15,10 +14,11 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        // Menghapus cache permission yang ada
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'user']);
+        // Membuat role jika belum ada
+        Role::firstOrCreate(['name' => 'admin']);
+        Role::firstOrCreate(['name' => 'user']);
     }
 }
