@@ -13,6 +13,18 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ url('administrator/wisata') }}" class="waves-effect"><i class="fa fa-map-marker"></i><span> Tempat Wisata </span></a>
+                </li>
+
+                <li>
+                    <a href="{{ url('administrator/kategori') }}" class="waves-effect"><i class="fa fa-folder"></i><span>  Kategori </span></a>
+                </li>
+
+                <li>
+                    <a href="{{ url('administrator/ulasan') }}" class="waves-effect"><i class="fas fa-newspaper"></i><span>  Ulasan </span></a>
+                </li>
+                
 
                 <li>
                     <a href="{{ url('administrator/kecamatan-view') }}" class="waves-effect"><i class="icon-calendar"></i><span> Add Kecamatan </span></a>

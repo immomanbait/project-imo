@@ -40,11 +40,11 @@ class AdminController extends Controller
         }
 
         // Tampilkan halaman login jika bukan permintaan POST
-        return view('admin.dashboard');
+        return view('admin.home');
     }
 
     public function index()
     {
-        return view('admin.home');
+        return view('admin.dashboard');
     }
 }
