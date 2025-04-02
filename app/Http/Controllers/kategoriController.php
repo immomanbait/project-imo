@@ -11,25 +11,25 @@ class KategoriController extends Controller
     public function index()
     {
         $data = Kategori::all();
-        return view('kategori.index', compact('data'));
+        return view('admin.kategori.index', compact('data'));
     }
 
     // Menampilkan form tambah kategori
     public function create()
     {
-        return view('kategori.create');
+        return view('admin.kategori.create');
     }
 
     // Menyimpan kategori baru
     public function store(Request $request)
     {
         $request->validate([
-            'id_kategori' => 'required|integer|unique:kategori,id_kategori',
+            
             'nama_kategori' => 'required|string|max:25',
         ]);
 
         Kategori::create([
-            'id_kategori' => $request->id_kategori,
+            
             'nama_kategori' => $request->nama_kategori,
         ]);
 
@@ -40,7 +40,7 @@ class KategoriController extends Controller
     public function edit($id)
     {
         $kategori = Kategori::findOrFail($id);
-        return view('kategori.edit', compact('kategori'));
+        return view('admin.kategori.edit', compact('kategori'));
     }
 
     // Update kategori

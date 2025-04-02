@@ -14,13 +14,15 @@ class LokasiWisata extends Migration
     public function up()
     {
         Schema::create('wisata', function (Blueprint $table) {
-            $table->integer('id_wisata')->primary(); // PRIMARY KEY
-            $table->string('nama_wisata', 50);
+            $table->id('id_wisata');
+            $table->string('nama_wisata', 100);
             $table->text('deskripsi');
-            $table->string('alamat', 50);
-            $table->integer('id_kategori'); // FOREIGN KEY
-            $table->decimal('lat', 10, 8); // integer, unsigned (opsional tergantung kebutuhan)
-            $table->decimal('long', 11, 8); // integer, unsigned (opsional)
+            $table->string('alamat', 255);
+            $table->unsignedBigInteger('id_kategori');
+            $table->decimal('lat', 10, 8)->nullable(false); // Latitude dengan format DECIMAL
+            $table->decimal('long', 11, 8)->nullable(false); // Longitude dengan format DECIMAL
+            $table->string('gambar_a')->nullable();
+            $table->string('gambar_b')->nullable();
 
             // Foreign Key constraint
             $table->foreign('id_kategori')->references('id_kategori')->on('kategori')->onDelete('cascade');

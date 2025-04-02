@@ -9,13 +9,13 @@ class Ulasan extends Model
 {
     use HasFactory;
 
-    protected $table = 'ulasan';           // Nama tabel
-    protected $primaryKey = 'id_ulasan';   // Primary key
-    public $timestamps = false;            // Karena tabel tidak memiliki created_at & updated_at
+    protected $table = 'ulasan';          // Nama tabel
+    protected $primaryKey = 'id_ulasan';  // Primary key
+    public $timestamps = false;           // Nonaktifkan timestamps
+    public $incrementing = true;          // Aktifkan auto-increment
 
     // Kolom yang bisa diisi mass assignment
     protected $fillable = [
-        'id_ulasan',
         'id_wisata',
         'komentar',
         'rating',

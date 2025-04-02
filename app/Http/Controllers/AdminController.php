@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Models\Kategori;
+use App\Models\Wisata;
 
 class AdminController extends Controller
 {
@@ -29,7 +31,7 @@ class AdminController extends Controller
             if (Auth::attempt($data)) {
                 // Jika login berhasil, periksa peran pengguna
                 if (auth()->user()->hasRole('admin')) {
-                    return redirect('/administrator/home')->with('flash_message_success', 'Login Berhasil');
+                    return redirect('/admin')->with('flash_message_success', 'Login Berhasil');
                 } elseif (auth()->user()->hasRole('user')) {
                     return redirect('/user/home')->with('flash_message_success', 'Anda adalah User');
                 }
@@ -42,9 +44,27 @@ class AdminController extends Controller
         // Tampilkan halaman login jika bukan permintaan POST
         return view('admin.home');
     }
+    public function searchWisata(Request $request)
+    {
+        $search = $request->input('search');
+
+        // Cari wisata berdasarkan nama_wisata
+        $wisata = \App\Models\Wisata::where('nama_wisata', 'LIKE', "%{$search}%")->pluck('nama_wisata');
+
+        return response()->json($wisata);
+    }
+
+    public function showWisata($nama_wisata)
+    {
+        $wisata = \App\Models\Wisata::where('nama_wisata', $nama_wisata)->firstOrFail();
+        return view('admin.wisata.detail', compact('wisata'));
+    }
+
+
 
     public function index()
     {
-        return view('admin.dashboard');
+        $kategori =  Kategori::all();
+        return view('admin.dashboard',compact('kategori'));
     }
 }
