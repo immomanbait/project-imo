@@ -1,68 +1,76 @@
 <?php
 
-use App\Http\Controllers\admin\HotSpotController;
-use App\Http\Controllers\admin\KecamatanController;
 use App\Http\Controllers\WisataController;
 use App\Http\Controllers\UlasanController;
 use App\Http\Controllers\KategoriController;
-
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HomeController;
+use App\Models\Wisata;
+use App\Models\Ulasan;
+use App\Models\Kategori;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
-use Spatie\Permission\Models\Role;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| Di sini Anda dapat mendaftarkan web routes untuk aplikasi.
+| Routes ini dimuat oleh RouteServiceProvider dalam grup "web".
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Halaman utama
+Route::get('/', [HomeController::class, 'index']);
+Route::post('/store-location', [HomeController::class, 'store']);
 
+// Halaman home (hanya untuk user yang sudah login)
 Route::view('home', 'home')->middleware('auth');
 
-Route::get('/admin', [AdminController::class, 'index']);
-Route::get('/dataLokasi', [wisataController::class, 'index']);
-Route::get('/dataUlasan', [ulasanController::class, 'index']);
+// Pencarian Wisata
+Route::get('/search-wisata', [WisataController::class, 'search'])->name('wisata.search');
+
+// Menampilkan daftar wisata
+Route::get('/wisatas', function () {
+    return view('user.tempat-wisata', [
+        'kategori' => Kategori::all(),
+        'wisatas' => Wisata::all()
+    ]);
+});
+
+
+// Menampilkan detail wisata berdasarkan nama wisata
+Route::get('/wisatas/{wisata:nama_wisata}', function (Wisata $wisata, Request $request) {
+    $ulasan = Ulasan::where('id_wisata', $wisata->id_wisata)->get(); // Ambil ulasan berdasarkan id_wisata
+    return view('user.cari-wisata', compact('wisata', 'ulasan'));
+});
 
 
 
+// Admin routes
+Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard'); // Menambahkan route admin.dashboard
+    Route::get('/search-wisata', [AdminController::class, 'searchWisata'])->name('admin.wisata.search');
+    Route::get('/wisatas/{nama_wisata}', [AdminController::class, 'showWisata'])->name('admin.wisata.show');
+});
+
+// Data Lokasi dan Ulasan
+Route::get('/dataLokasi', [WisataController::class, 'index']);
+
+
+Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
+
+
+// Login admin
 Route::post('login-post', [AdminController::class, 'login']);
 
-Route::prefix('administrator')->group(function () {
-    // Middleware untuk memastikan hanya admin yang dapat mengakses route ini
-Route::group(['middleware' => ['role:admin']], function () {
+// Group route khusus untuk administrator dengan middleware role:admin
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/home', [AdminController::class, 'index']);
-
     Route::resource('/kategori', KategoriController::class);
     Route::resource('/wisata', WisataController::class);
-    Route::resource('/ulasan', UlasanController::class);
-
-
-
-
-
-        // CRUD Kecamatan
-    Route::get('/kecamatan-view', [KecamatanController::class, 'viewKecamatan']);
-    Route::match(['get', 'post'], '/kecamatan-add', [KecamatanController::class, 'addKecamatan']);
-    Route::match(['get', 'post'], '/kecamatan-edit/{id}', [KecamatanController::class, 'editKecamatan']);
-    Route::delete('/kecamatan-del/{id}', [KecamatanController::class, 'delKecamatan']);
-
-        // View Maps
-    Route::get('/kecamatan-view-maps', [KecamatanController::class, 'viewMapsKecamatan']);
-
-        // CRUD HotSpot
-    Route::get('/hotspot-view', [HotSpotController::class, 'viewHotspot']);
-    Route::match(['get', 'post'], '/hotspot-add', [HotSpotController::class, 'addHotspot']);
-    Route::delete('/hotspot-del/{id}', [HotSpotController::class, 'delHotspot']);
-    Route::match(['get', 'post'], '/hotspot-edit/{id}', [HotSpotController::class, 'editHotspot']);
-    Route::get('/hotspot-view-maps', [HotSpotController::class, 'viewMapsHotspot']);
-   
-    });
+    Route::resource('/ulasan', UlasanController::class)->except(['store']);
+    Route::get('/Ulasan', [UlasanController::class, 'index']); // Admin hanya mengelola ulasan, tidak menyimpan
 });

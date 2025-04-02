@@ -14,9 +14,10 @@ class Kategori extends Migration
     public function up()
     {
         Schema::create('kategori', function (Blueprint $table) {
-            $table->integer('id_kategori')->primary(); // PRIMARY KEY
-            $table->string('nama_kategori', 25);
-        });
+        $table->id('id_kategori'); // Primary key dan unsigned
+        $table->string('nama_kategori', 100);
+    });
+    
     }
 
     /**

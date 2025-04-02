@@ -14,12 +14,11 @@ class Ulasan extends Migration
     public function up()
     {
         Schema::create('ulasan', function (Blueprint $table) {
-            $table->increments('id_ulasan'); // PRIMARY KEY
-            $table->integer('id_wisata'); // FOREIGN KEY ke wisata
+            $table->id('id_ulasan');
+            $table->bigInteger('id_wisata')->unsigned(); // Hapus AUTO_INCREMENT/ Harus unsigned
             $table->text('komentar');
-            $table->decimal('rating', 5, 0); // decimal(5,0) sesuai SQL-mu
-            $table->dateTime('tanggal');
-
+            $table->decimal('rating', 2, 1);
+            $table->date('tanggal');
             // Foreign Key constraint
             $table->foreign('id_wisata')->references('id_wisata')->on('wisata')->onDelete('cascade');
         });

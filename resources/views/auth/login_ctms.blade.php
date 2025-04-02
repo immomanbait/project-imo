@@ -8,7 +8,7 @@
         <title>Login Sistem Informasi Gegrafis</title>
         <meta content="Responsive admin theme build on top of Bootstrap 4" name="description" />
         <meta content="Themesdesign" name="author" />
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
+       
 
         <link href="{{  asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
         <link href="{{  asset('assets/css/metismenu.min.css') }}" rel="stylesheet" type="text/css">
@@ -28,10 +28,8 @@
                 <div class="card card-pages shadow-none">
 
                     <div class="card-body">
-                        <div class="text-center m-t-0 m-b-15">
-                                <a href="index.html" class="logo logo-admin"><img src="{{ asset('assets/images/logo-light.png')  }}" alt="" height="24"></a>
-                        </div>
-                        <h5 class="font-18 text-center">Sign in to Siste Informasi Geografis <br> Indonesia</h5>
+                        
+                        <h5 class="font-18 text-center text-white" >Login Admin<br>SIG Tempat Wisata Kota Kupang </h5>
 
                         @if (Session::has('flash_message_success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">

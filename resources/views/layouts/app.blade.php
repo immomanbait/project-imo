@@ -56,7 +56,7 @@
                         @endcan
                         @role('admin')
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Admin Panel</a>
+                            <a class="nav-link" href="/administrator/Home">Admin Panel</a>
                         </li>
                         @endrole
                             <li class="nav-item dropdown">
